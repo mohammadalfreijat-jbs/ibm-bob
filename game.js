@@ -719,6 +719,14 @@ function updateScoreboard() {
     livesDisplay.textContent = lives;
     timeDisplay.textContent = timeRemaining;
     highScoreDisplay.textContent = highScore;
+
+    const timeCard = timeDisplay.closest(".score-card");
+
+    if (timeRemaining <= 10 && gameRunning) {
+        timeCard.classList.add("urgent");
+    } else {
+        timeCard.classList.remove("urgent");
+    }
 }
 
 /*
