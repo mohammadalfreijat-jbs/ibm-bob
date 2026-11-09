@@ -119,7 +119,9 @@ const timeDisplay = document.getElementById("timeDisplay");
 const highScoreDisplay = document.getElementById("highScoreDisplay");
 
 const startButton = document.getElementById("startButton");
+const pauseButton = document.getElementById("pauseButton");
 const resetButton = document.getElementById("resetButton");
+const pauseOverlay = document.getElementById("pauseOverlay");
 
 const moveLeftButton = document.getElementById("moveLeftButton");
 const moveRightButton = document.getElementById("moveRightButton");
@@ -133,6 +135,7 @@ const closeDialogButton = document.getElementById("closeDialogButton");
 */
 
 let gameRunning = false;
+let gamePaused = false;
 let animationFrameId = null;
 let spawnTimerId = null;
 let countdownTimerId = null;
@@ -345,6 +348,9 @@ function startGame() {
 
     startOverlay.classList.add("hidden");
     gameRunning = true;
+    gamePaused = false;
+    pauseButton.disabled = false;
+    pauseButton.textContent = "⏸ Pause";
 
     gameArea.focus();
 
@@ -404,6 +410,10 @@ function resetGame() {
         </div>
     `;
 
+    pauseOverlay.classList.add("hidden");
+    pauseButton.disabled = true;
+    pauseButton.textContent = "⏸ Pause";
+    gamePaused = false;
     startOverlay.classList.remove("hidden");
     startButton.textContent = "Start Game";
 }
@@ -706,6 +716,8 @@ function endGame(reason) {
         </div>
     `;
 
+    pauseButton.disabled = true;
+    pauseButton.textContent = "⏸ Pause";
     startOverlay.classList.remove("hidden");
     startButton.textContent = "Play Again";
 }
@@ -749,8 +761,78 @@ function updateScoreboard() {
     Input controls
 */
 
+function pauseGame() {
+    if (!gameRunning || gamePaused) {
+        return;
+    }
+
+    gamePaused = true;
+
+    window.cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+    window.clearInterval(spawnTimerId);
+    spawnTimerId = null;
+    window.clearInterval(countdownTimerId);
+    countdownTimerId = null;
+
+    pauseOverlay.classList.remove("hidden");
+    pauseButton.textContent = "▶ Resume";
+}
+
+function resumeGame() {
+    if (!gameRunning || !gamePaused) {
+        return;
+    }
+
+    gamePaused = false;
+
+    pauseOverlay.classList.add("hidden");
+    pauseButton.textContent = "⏸ Pause";
+
+    function restartSpawnTimer() {
+        if (spawnTimerId !== null) {
+            window.clearInterval(spawnTimerId);
+        }
+
+        const progress = getDifficultyProgress();
+        const interval = Math.round(
+            gameConfig.spawnIntervalMilliseconds * (1 - progress * 0.5)
+        );
+
+        spawnTimerId = window.setInterval(createFallingItem, interval);
+    }
+
+    restartSpawnTimer();
+
+    countdownTimerId = window.setInterval(() => {
+        timeRemaining -= 1;
+        updateScoreboard();
+        restartSpawnTimer();
+
+        if (timeRemaining <= 0) {
+            endGame("time");
+        }
+    }, 1000);
+
+    animationFrameId = window.requestAnimationFrame(gameLoop);
+    gameArea.focus();
+}
+
+function togglePause() {
+    if (gamePaused) {
+        resumeGame();
+    } else {
+        pauseGame();
+    }
+}
+
 document.addEventListener("keydown", (event) => {
     const key = event.key.toLowerCase();
+
+    if (event.code === "Space" && gameRunning) {
+        event.preventDefault();
+        togglePause();
+    }
 
     if (key === "arrowleft" || key === "a") {
         event.preventDefault();
@@ -810,6 +892,7 @@ activateMovementButton(moveRightButton, "right");
 */
 
 startButton.addEventListener("click", startGame);
+pauseButton.addEventListener("click", togglePause);
 resetButton.addEventListener("click", resetGame);
 
 themeSelect.addEventListener("change", () => {
