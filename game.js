@@ -476,8 +476,11 @@ function createFallingItem() {
         gameConfig.fallingSpeed * (1 + progress * 1.5) +
         Math.random() * 1.5;
 
+    const dynamicObstacleChance =
+        gameConfig.obstacleChance + progress * 0.25;
+
     const roll = Math.random();
-    const isBadItem = roll < gameConfig.obstacleChance;
+    const isBadItem = roll < dynamicObstacleChance;
     const isBonusItem = !isBadItem && roll > (1 - gameConfig.bonusChance);
 
     const itemElement = document.createElement("div");
