@@ -130,10 +130,9 @@ let timeRemaining = gameConfig.durationSeconds;
 let highScore = Number(localStorage.getItem("ibmBobHighScore")) || 0;
 
 /*
-    Google Sheets Web App URL.
-    Replace the placeholder below with your deployed Apps Script URL.
+    Power Automate HTTP trigger URL for Excel lead capture.
 */
-const SHEETS_ENDPOINT = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+const SHEETS_ENDPOINT = "https://defaultf8732124c5e24e519ce15530ffc7be.54.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/13/workflows/c80998fda0d049b39883d7c63ce79c4b/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=fAsO4CnVAQSDwl05gGY46kj6tvNPH_pLOkAD1spu-qQ";
 
 let playerX = 0;
 let currentPlayerSpeed = gameConfig.playerSpeeds.normal;
