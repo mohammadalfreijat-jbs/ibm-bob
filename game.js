@@ -142,6 +142,7 @@ let moveLeft = false;
 let moveRight = false;
 
 let fallingItems = [];
+let comboCount = 0;
 
 /*
     Initialization
@@ -323,6 +324,7 @@ function startGame() {
     score = 0;
     lives = gameConfig.startingLives;
     timeRemaining = gameConfig.durationSeconds;
+    comboCount = 0;
 
     removeAllFallingItems();
     positionPlayerInCenter();
@@ -369,6 +371,7 @@ function resetGame() {
     score = 0;
     lives = gameConfig.startingLives;
     timeRemaining = gameConfig.durationSeconds;
+    comboCount = 0;
 
     moveLeft = false;
     moveRight = false;
@@ -535,6 +538,7 @@ function isColliding(firstElement, secondElement) {
 
 function handleCollision(item) {
     if (item.isBad) {
+        comboCount = 0;
         lives -= 1;
 
         showScorePopup(
@@ -559,26 +563,28 @@ function handleCollision(item) {
             endGame("lives");
             return;
         }
-    } else if (item.isBonus) {
-        const bonusPoints = gameConfig.pointsPerItem * 3;
-
-        score += bonusPoints;
-
-        showScorePopup(
-            `+${bonusPoints} BONUS!`,
-            item.x,
-            item.y,
-            "#ffd700"
-        );
     } else {
-        score += gameConfig.pointsPerItem;
+        comboCount += 1;
 
-        showScorePopup(
-            `+${gameConfig.pointsPerItem}`,
-            item.x,
-            item.y,
-            "#a7f0ba"
-        );
+        const multiplier = comboCount >= 3 ? 2 : 1;
+        const basePoints = item.isBonus
+            ? gameConfig.pointsPerItem * 3
+            : gameConfig.pointsPerItem;
+        const earned = basePoints * multiplier;
+
+        score += earned;
+
+        if (comboCount === 3) {
+            showScorePopup("COMBO x2! 🔥", item.x, item.y - 30, "#fbbf24");
+        }
+
+        const label = item.isBonus
+            ? `+${earned} BONUS!`
+            : `+${earned}${multiplier > 1 ? " x2" : ""}`;
+
+        const color = item.isBonus ? "#ffd700" : "#a7f0ba";
+
+        showScorePopup(label, item.x, item.y, color);
     }
 
     updateScoreboard();
