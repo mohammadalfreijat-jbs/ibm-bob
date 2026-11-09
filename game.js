@@ -93,6 +93,8 @@ const gameTitle = document.getElementById("gameTitle");
 const subtitle = document.querySelector(".subtitle");
 
 const playerNameInput = document.getElementById("playerNameInput");
+const emailInput = document.getElementById("emailInput");
+const phoneInput = document.getElementById("phoneInput");
 const themeSelect = document.getElementById("themeSelect");
 const speedSelect = document.getElementById("speedSelect");
 const pointsSelect = document.getElementById("pointsSelect");
@@ -127,6 +129,12 @@ let lives = gameConfig.startingLives;
 let timeRemaining = gameConfig.durationSeconds;
 let highScore = Number(localStorage.getItem("ibmBobHighScore")) || 0;
 
+/*
+    Google Sheets Web App URL.
+    Replace the placeholder below with your deployed Apps Script URL.
+*/
+const SHEETS_ENDPOINT = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
 let playerX = 0;
 let currentPlayerSpeed = gameConfig.playerSpeeds.normal;
 let currentTheme = themes.technology;
@@ -153,6 +161,88 @@ function saveHighScore(finalScore) {
         highScore = finalScore;
         localStorage.setItem("ibmBobHighScore", highScore);
     }
+}
+
+/*
+    Leaderboard — top-5 stored in localStorage.
+*/
+
+function getLeaderboard() {
+    try {
+        return JSON.parse(localStorage.getItem("ibmBobLeaderboard")) || [];
+    } catch {
+        return [];
+    }
+}
+
+function saveLeaderboard(name, finalScore) {
+    const board = getLeaderboard();
+
+    board.push({ name: name || "Guest", score: finalScore });
+    board.sort((a, b) => b.score - a.score);
+
+    const top5 = board.slice(0, 5);
+
+    localStorage.setItem("ibmBobLeaderboard", JSON.stringify(top5));
+
+    return top5;
+}
+
+function buildLeaderboardHTML(board) {
+    if (board.length === 0) {
+        return "";
+    }
+
+    const rows = board.map((entry, index) => `
+        <tr>
+            <td style="padding:4px 10px;opacity:0.7;">#${index + 1}</td>
+            <td style="padding:4px 10px;">${escapeHtml(entry.name)}</td>
+            <td style="padding:4px 10px;font-weight:700;">${entry.score}</td>
+        </tr>
+    `).join("");
+
+    return `
+        <div style="margin-top:16px;">
+            <p style="font-weight:700;margin-bottom:6px;">🏅 GITEX Leaderboard</p>
+            <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+                <thead>
+                    <tr style="opacity:0.6;font-size:0.8rem;text-transform:uppercase;">
+                        <th style="padding:4px 10px;text-align:left;">#</th>
+                        <th style="padding:4px 10px;text-align:left;">Name</th>
+                        <th style="padding:4px 10px;text-align:left;">Score</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+/*
+    Google Sheets submission — fire-and-forget.
+*/
+
+function submitToSheets(name, email, phone, finalScore) {
+    if (!SHEETS_ENDPOINT || SHEETS_ENDPOINT.startsWith("YOUR_")) {
+        return;
+    }
+
+    const payload = {
+        name: name || "Guest",
+        email: email || "",
+        phone: phone || "",
+        score: finalScore,
+        theme: currentTheme.title,
+        timestamp: new Date().toISOString()
+    };
+
+    fetch(SHEETS_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    }).catch(() => {
+        /* Silently ignore network errors during the demo. */
+    });
 }
 
 function applyTheme(themeName) {
@@ -558,10 +648,17 @@ function endGame(reason) {
         resultHeading = "Challenge Over!";
     }
 
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim();
+
     saveHighScore(score);
 
+    const leaderboard = saveLeaderboard(playerName, score);
     const scoreMessage = getScoreMessage(score);
     const isNewBest = score > 0 && score >= highScore;
+    const leaderboardHTML = buildLeaderboardHTML(leaderboard);
+
+    submitToSheets(playerName, email, phone, score);
 
     startOverlay.innerHTML = `
         <div class="overlay-content">
@@ -583,6 +680,8 @@ function endGame(reason) {
             <p>${scoreMessage}</p>
 
             <p>${currentTheme.successMessage}</p>
+
+            ${leaderboardHTML}
         </div>
     `;
 
