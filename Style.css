@@ -73,7 +73,7 @@ h1 {
 
 .scoreboard {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 12px;
     margin-bottom: 18px;
 }
@@ -265,6 +265,12 @@ button:focus-visible,
     background: #fff1f1;
 }
 
+.bonus-item {
+    border-color: #ffd700;
+    background: #fffbe6;
+    animation: bonusGlow 600ms infinite alternate;
+}
+
 .overlay {
     position: absolute;
     inset: 0;
@@ -378,6 +384,18 @@ dialog::backdrop {
     }
 }
 
+@keyframes bonusGlow {
+    from {
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+        transform: scale(1);
+    }
+
+    to {
+        box-shadow: 0 0 28px rgba(255, 215, 0, 1);
+        transform: scale(1.12);
+    }
+}
+
 @keyframes popupMove {
     from {
         opacity: 1;
@@ -409,7 +427,7 @@ dialog::backdrop {
     }
 
     .scoreboard {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 
     .game-layout {

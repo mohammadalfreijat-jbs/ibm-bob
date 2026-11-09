@@ -23,7 +23,8 @@ const gameConfig = {
 
     fallingSpeed: 3.2,
     spawnIntervalMilliseconds: 850,
-    obstacleChance: 0.25
+    obstacleChance: 0.25,
+    bonusChance: 0.08
 };
 
 const themes = {
@@ -64,6 +65,19 @@ const themes = {
         backgroundStart: "#082b16",
         backgroundEnd: "#165c31",
         successMessage: "You helped build a smarter city!"
+    },
+
+    watsonx: {
+        title: "IBM watsonx AI Challenge",
+        description: "Collect AI insights and avoid hallucinations.",
+        playerIcon: "🧠",
+        goodIcon: "💡",
+        badIcon: "🌀",
+        primaryColor: "#8a3ffc",
+        accentColor: "#d4bbff",
+        backgroundStart: "#1a0533",
+        backgroundEnd: "#3d1473",
+        successMessage: "You mastered the power of IBM watsonx AI!"
     }
 };
 
@@ -87,6 +101,7 @@ const playerNameDisplay = document.getElementById("playerNameDisplay");
 const scoreDisplay = document.getElementById("scoreDisplay");
 const livesDisplay = document.getElementById("livesDisplay");
 const timeDisplay = document.getElementById("timeDisplay");
+const highScoreDisplay = document.getElementById("highScoreDisplay");
 
 const startButton = document.getElementById("startButton");
 const resetButton = document.getElementById("resetButton");
@@ -110,6 +125,7 @@ let countdownTimerId = null;
 let score = 0;
 let lives = gameConfig.startingLives;
 let timeRemaining = gameConfig.durationSeconds;
+let highScore = Number(localStorage.getItem("ibmBobHighScore")) || 0;
 
 let playerX = 0;
 let currentPlayerSpeed = gameConfig.playerSpeeds.normal;
@@ -130,6 +146,13 @@ function initializeGame() {
     updateScoreboard();
 
     window.addEventListener("resize", keepPlayerInsideGameArea);
+}
+
+function saveHighScore(finalScore) {
+    if (finalScore > highScore) {
+        highScore = finalScore;
+        localStorage.setItem("ibmBobHighScore", highScore);
+    }
 }
 
 function applyTheme(themeName) {
@@ -221,14 +244,25 @@ function startGame() {
 
     gameArea.focus();
 
-    spawnTimerId = window.setInterval(
-        createFallingItem,
-        gameConfig.spawnIntervalMilliseconds
-    );
+    function restartSpawnTimer() {
+        if (spawnTimerId !== null) {
+            window.clearInterval(spawnTimerId);
+        }
+
+        const progress = getDifficultyProgress();
+        const interval = Math.round(
+            gameConfig.spawnIntervalMilliseconds * (1 - progress * 0.5)
+        );
+
+        spawnTimerId = window.setInterval(createFallingItem, interval);
+    }
+
+    restartSpawnTimer();
 
     countdownTimerId = window.setInterval(() => {
         timeRemaining -= 1;
         updateScoreboard();
+        restartSpawnTimer();
 
         if (timeRemaining <= 0) {
             endGame("time");
@@ -321,26 +355,41 @@ function movePlayer() {
     Falling items
 */
 
+function getDifficultyProgress() {
+    const elapsed = gameConfig.durationSeconds - timeRemaining;
+
+    return Math.min(1, elapsed / gameConfig.durationSeconds);
+}
+
 function createFallingItem() {
     if (!gameRunning) {
         return;
     }
 
-    const isBadItem = Math.random() < gameConfig.obstacleChance;
+    const progress = getDifficultyProgress();
+    const dynamicSpeed =
+        gameConfig.fallingSpeed * (1 + progress * 1.5) +
+        Math.random() * 1.5;
+
+    const roll = Math.random();
+    const isBadItem = roll < gameConfig.obstacleChance;
+    const isBonusItem = !isBadItem && roll > (1 - gameConfig.bonusChance);
+
     const itemElement = document.createElement("div");
 
-    itemElement.className = isBadItem
-        ? "falling-item bad-item"
-        : "falling-item good-item";
-
-    itemElement.textContent = isBadItem
-        ? currentTheme.badIcon
-        : currentTheme.goodIcon;
-
-    itemElement.setAttribute(
-        "aria-label",
-        isBadItem ? "Obstacle" : "Collectible"
-    );
+    if (isBadItem) {
+        itemElement.className = "falling-item bad-item";
+        itemElement.textContent = currentTheme.badIcon;
+        itemElement.setAttribute("aria-label", "Obstacle");
+    } else if (isBonusItem) {
+        itemElement.className = "falling-item bonus-item";
+        itemElement.textContent = "🏆";
+        itemElement.setAttribute("aria-label", "Bonus");
+    } else {
+        itemElement.className = "falling-item good-item";
+        itemElement.textContent = currentTheme.goodIcon;
+        itemElement.setAttribute("aria-label", "Collectible");
+    }
 
     const itemWidth = 48;
     const maximumX = Math.max(
@@ -359,9 +408,8 @@ function createFallingItem() {
         x: itemX,
         y: -55,
         isBad: isBadItem,
-        speed:
-            gameConfig.fallingSpeed +
-            Math.random() * 1.5
+        isBonus: isBonusItem,
+        speed: dynamicSpeed
     });
 }
 
@@ -422,6 +470,17 @@ function handleCollision(item) {
             endGame("lives");
             return;
         }
+    } else if (item.isBonus) {
+        const bonusPoints = gameConfig.pointsPerItem * 3;
+
+        score += bonusPoints;
+
+        showScorePopup(
+            `+${bonusPoints} BONUS!`,
+            item.x,
+            item.y,
+            "#ffd700"
+        );
     } else {
         score += gameConfig.pointsPerItem;
 
@@ -499,7 +558,10 @@ function endGame(reason) {
         resultHeading = "Challenge Over!";
     }
 
+    saveHighScore(score);
+
     const scoreMessage = getScoreMessage(score);
+    const isNewBest = score > 0 && score >= highScore;
 
     startOverlay.innerHTML = `
         <div class="overlay-content">
@@ -516,6 +578,8 @@ function endGame(reason) {
                 <strong>${score}</strong>
             </p>
 
+            ${isNewBest ? `<p style="color:#a7f0ba; font-weight:700;">🎉 New Best Score!</p>` : `<p style="opacity:0.8;">Best: ${highScore}</p>`}
+
             <p>${scoreMessage}</p>
 
             <p>${currentTheme.successMessage}</p>
@@ -528,18 +592,18 @@ function endGame(reason) {
 
 function getScoreMessage(finalScore) {
     if (finalScore >= 300) {
-        return "Outstanding performance! You are an AI Champion.";
+        return "Outstanding! You're ready for IBM Think. 🏆";
     }
 
     if (finalScore >= 150) {
-        return "Excellent work! You completed the challenge.";
+        return "Excellent! IBM watsonx would be proud of you. 🚀";
     }
 
     if (finalScore >= 50) {
-        return "Good work! Try again to improve your score.";
+        return "Good start! Every IBM innovation begins with curiosity. 💡";
     }
 
-    return "Nice attempt! Play again and collect more items.";
+    return "Keep going! Even Deep Blue lost before it won. 🤖";
 }
 
 /*
@@ -550,6 +614,7 @@ function updateScoreboard() {
     scoreDisplay.textContent = score;
     livesDisplay.textContent = lives;
     timeDisplay.textContent = timeRemaining;
+    highScoreDisplay.textContent = highScore;
 }
 
 /*
