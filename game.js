@@ -78,6 +78,19 @@ const themes = {
         backgroundStart: "#1a0533",
         backgroundEnd: "#3d1473",
         successMessage: "You mastered the power of IBM watsonx AI!"
+    },
+
+    gitex: {
+        title: "GITEX 2026 — IBM Challenge",
+        description: "Collect innovation tokens and avoid disruptions.",
+        playerIcon: "🌐",
+        goodIcon: "🔷",
+        badIcon: "⚠️",
+        primaryColor: "#00c48c",
+        accentColor: "#00ff87",
+        backgroundStart: "#000000",
+        backgroundEnd: "#002a1a",
+        successMessage: "You're a GITEX 2026 Innovation Champion! See you at the IBM booth. 🎉"
     }
 };
 
