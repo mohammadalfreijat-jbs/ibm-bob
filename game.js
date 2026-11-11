@@ -959,7 +959,23 @@ function togglePause() {
     }
 }
 
+function isTypingInInput() {
+    const tag = document.activeElement?.tagName;
+    const type = document.activeElement?.type;
+
+    return (
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        tag === "SELECT" ||
+        document.activeElement?.isContentEditable
+    );
+}
+
 document.addEventListener("keydown", (event) => {
+    if (isTypingInInput()) {
+        return;
+    }
+
     const key = event.key.toLowerCase();
 
     if (event.code === "Space" && gameRunning) {
@@ -979,6 +995,10 @@ document.addEventListener("keydown", (event) => {
 });
 
 document.addEventListener("keyup", (event) => {
+    if (isTypingInInput()) {
+        return;
+    }
+
     const key = event.key.toLowerCase();
 
     if (key === "arrowleft" || key === "a") {
