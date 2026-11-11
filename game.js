@@ -960,25 +960,36 @@ function togglePause() {
 }
 
 function isTypingInInput() {
-    const tag = document.activeElement?.tagName;
-    const type = document.activeElement?.type;
+    const el = document.activeElement;
 
-    return (
-        tag === "INPUT" ||
-        tag === "TEXTAREA" ||
-        tag === "SELECT" ||
-        document.activeElement?.isContentEditable
-    );
+    if (!el) {
+        return false;
+    }
+
+    if (el.isContentEditable || el.tagName === "TEXTAREA") {
+        return true;
+    }
+
+    if (el.tagName === "INPUT") {
+        const textTypes = new Set([
+            "text", "email", "tel", "password",
+            "search", "url", "number"
+        ]);
+
+        return textTypes.has((el.type || "text").toLowerCase());
+    }
+
+    return false;
 }
 
 document.addEventListener("keydown", (event) => {
-    if (isTypingInInput()) {
+    if (isTypingInInput() || !gameRunning) {
         return;
     }
 
     const key = event.key.toLowerCase();
 
-    if (event.code === "Space" && gameRunning) {
+    if (event.code === "Space") {
         event.preventDefault();
         togglePause();
     }
@@ -995,7 +1006,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 document.addEventListener("keyup", (event) => {
-    if (isTypingInInput()) {
+    if (isTypingInInput() || !gameRunning) {
         return;
     }
 
