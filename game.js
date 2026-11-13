@@ -163,10 +163,10 @@ const themes = {
         playerEmoji: "🤖",
         goodIcon: svg.star,
         badIcon: svg.bug,
-        primaryColor: "#0f62fe",
-        accentColor: "#78a9ff",
-        backgroundStart: "#071a2f",
-        backgroundEnd: "#123f68",
+        primaryColor: "#198038",
+        accentColor: "#6fdc8c",
+        backgroundStart: "#071a0e",
+        backgroundEnd: "#0d3b1e",
         successMessage: "You powered the future with AI!"
     },
 
