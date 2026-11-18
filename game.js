@@ -1151,6 +1151,7 @@ function escapeHtml(value) {
         /* — Switch screens — */
         regScreen.hidden = true;
         gameScreen.hidden = false;
+        window.scrollTo({ top: 0, behavior: "instant" });
 
         /* — Initialise game now that the canvas is visible — */
         initializeGame();
