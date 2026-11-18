@@ -187,11 +187,19 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Registration / Landing screen
+   Full-page slide transition
+   reg-screen sits on top (fixed), slides up on .game-active
 ───────────────────────────────────────────────────────────── */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
 .reg-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
     display: flex;
-    min-height: 100vh;
     align-items: center;
     justify-content: center;
     padding: 24px;
@@ -199,6 +207,14 @@ body {
     background-image:
         radial-gradient(circle at 15% 20%, rgba(255,255,255,0.12), transparent 40%),
         radial-gradient(circle at 85% 80%, rgba(0,0,0,0.15),        transparent 40%);
+    transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1),
+                opacity   0.55s ease;
+}
+
+html.game-active .reg-screen {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .reg-card {

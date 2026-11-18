@@ -106,7 +106,7 @@
     <!-- ═══════════════════════════════════════════════════════════
          GAME SCREEN
     ═══════════════════════════════════════════════════════════ -->
-    <main class="game-wrapper" id="gameScreen" hidden>
+    <main class="game-wrapper" id="gameScreen">
 
         <header class="game-header">
             <div class="game-header-left">
@@ -170,42 +170,12 @@
             <aside class="control-panel">
                 <h2>Customize your game</h2>
 
-                <!-- name / email / phone are now hidden inputs populated from the registration screen -->
+                <!-- hidden inputs populated from the registration screen -->
                 <input id="playerNameInput" type="hidden">
                 <input id="emailInput"      type="hidden">
                 <input id="phoneInput"      type="hidden">
-
-                <label class="cds-label" for="themeSelect">
-                    Theme
-                </label>
-
-                <select id="themeSelect" class="cds-select">
-                    <option value="technology">Technology</option>
-                    <option value="cybersecurity">Cybersecurity</option>
-                    <option value="smartCity">Smart City</option>
-                    <option value="watsonx">IBM watsonx AI</option>
-                    <option value="gitex">GITEX 2026</option>
-                </select>
-
-                <label class="cds-label" for="speedSelect">
-                    Player speed
-                </label>
-
-                <select id="speedSelect" class="cds-select">
-                    <option value="slow">Slow</option>
-                    <option value="normal" selected>Normal</option>
-                    <option value="fast">Fast</option>
-                </select>
-
-                <label class="cds-label" for="pointsSelect">
-                    Points per item
-                </label>
-
-                <select id="pointsSelect" class="cds-select">
-                    <option value="10">10 points</option>
-                    <option value="20">20 points</option>
-                    <option value="30">30 points</option>
-                </select>
+                <!-- single fixed theme — no selector needed -->
+                <select id="themeSelect" hidden><option value="technology" selected>Technology</option></select>
 
                 <button
                     id="startButton"

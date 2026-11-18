@@ -163,67 +163,11 @@ const themes = {
         playerEmoji: "🤖",
         goodIcon: svg.star,
         badIcon: svg.bug,
-        primaryColor: "#198038",
-        accentColor: "#6fdc8c",
-        backgroundStart: "#071a0e",
-        backgroundEnd: "#0d3b1e",
-        successMessage: "You powered the future with AI!"
-    },
-
-    cybersecurity: {
-        title: "Cybersecurity Defense Challenge",
-        description: "Collect protected data and avoid cyber threats.",
-        playerIcon: svg.shield,
-        playerEmoji: "🛡️",
-        goodIcon: svg.lock,
-        badIcon: svg.virus,
-        primaryColor: "#007d79",
-        accentColor: "#42be65",
-        backgroundStart: "#061a18",
-        backgroundEnd: "#0b4f4a",
-        successMessage: "You protected the digital environment!"
-    },
-
-    smartCity: {
-        title: "Smart City Challenge",
-        description: "Collect clean energy and avoid traffic barriers.",
-        playerIcon: svg.car,
-        playerEmoji: "🚙",
-        goodIcon: svg.bolt,
-        badIcon: svg.cone,
-        primaryColor: "#198038",
-        accentColor: "#a7f0ba",
-        backgroundStart: "#082b16",
-        backgroundEnd: "#165c31",
-        successMessage: "You helped build a smarter city!"
-    },
-
-    watsonx: {
-        title: "IBM watsonx AI Challenge",
-        description: "Collect AI insights and avoid hallucinations.",
-        playerIcon: svg.brain,
-        playerEmoji: "🧠",
-        goodIcon: svg.bulb,
-        badIcon: svg.swirl,
-        primaryColor: "#8a3ffc",
-        accentColor: "#d4bbff",
-        backgroundStart: "#1a0533",
-        backgroundEnd: "#3d1473",
-        successMessage: "You mastered the power of IBM watsonx AI!"
-    },
-
-    gitex: {
-        title: "GITEX 2026 — IBM Challenge",
-        description: "Collect innovation tokens and avoid disruptions.",
-        playerIcon: svg.globe,
-        playerEmoji: "🌐",
-        goodIcon: svg.diamond,
-        badIcon: svg.warning,
-        primaryColor: "#00c48c",
-        accentColor: "#00ff87",
-        backgroundStart: "#000000",
-        backgroundEnd: "#002a1a",
-        successMessage: "You're a GITEX 2026 Innovation Champion! See you at the IBM booth. 🎉"
+        primaryColor: "#008080",
+        accentColor: "#3ddbd9",
+        backgroundStart: "#071a2f",
+        backgroundEnd: "#123f68",
+        successMessage: "You powered the future with IBM Bob!"
     }
 };
 
@@ -242,8 +186,6 @@ const playerNameInput = document.getElementById("playerNameInput");
 const emailInput = document.getElementById("emailInput");
 const phoneInput = document.getElementById("phoneInput");
 const themeSelect = document.getElementById("themeSelect");
-const speedSelect = document.getElementById("speedSelect");
-const pointsSelect = document.getElementById("pointsSelect");
 
 const playerNameDisplay = document.getElementById("playerNameDisplay");
 const scoreDisplay = document.getElementById("scoreDisplay");
@@ -456,19 +398,15 @@ function startGame() {
         return;
     }
 
-    applyTheme(themeSelect.value);
+    applyTheme("technology");
 
     const enteredName = playerNameInput.value.trim();
 
     playerNameDisplay.textContent =
         enteredName.length > 0 ? enteredName : "Guest";
 
-    currentPlayerSpeed =
-        gameConfig.playerSpeeds[speedSelect.value] ||
-        gameConfig.playerSpeeds.normal;
-
-    gameConfig.pointsPerItem =
-        Number.parseInt(pointsSelect.value, 10) || 10;
+    currentPlayerSpeed = gameConfig.playerSpeeds.normal;
+    gameConfig.pointsPerItem = 10;
 
     score = 0;
     lives = gameConfig.startingLives;
@@ -1059,12 +997,6 @@ startButton.addEventListener("click", startGame);
 pauseButton.addEventListener("click", togglePause);
 resetButton.addEventListener("click", resetGame);
 
-themeSelect.addEventListener("change", () => {
-    if (!gameRunning) {
-        applyTheme(themeSelect.value);
-    }
-});
-
 howToPlayButton.addEventListener("click", () => {
     if (typeof instructionsDialog.showModal === "function") {
         instructionsDialog.showModal();
@@ -1148,10 +1080,15 @@ function escapeHtml(value) {
         emailInput.value      = emailVal;
         phoneInput.value      = regPhone.value.trim();
 
-        /* — Switch screens — */
-        regScreen.hidden = true;
-        gameScreen.hidden = false;
-        window.scrollTo({ top: 0, behavior: "instant" });
+        /* — Show player name immediately in the scoreboard — */
+        playerNameDisplay.textContent = nameVal;
+
+        /* — Slide to game screen — */
+        document.documentElement.classList.add("game-active");
+        regScreen.addEventListener("transitionend", function onDone() {
+            regScreen.hidden = true;
+            regScreen.removeEventListener("transitionend", onDone);
+        }, { once: true });
 
         /* — Initialise game now that the canvas is visible — */
         initializeGame();
