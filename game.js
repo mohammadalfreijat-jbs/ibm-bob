@@ -31,27 +31,32 @@ const gameConfig = {
 const svg = {
 
     /*
-     * Player — IBM Carbon "Bot" icon style
-     * Teal (#008080) body, white face, #3ddbd9 antenna
+     * Player — IBM Carbon AI Pilot
+     * Helmet visor design with teal HUD display
      */
     robot: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <!-- antenna -->
-        <line x1="16" y1="7" x2="16" y2="4" stroke="#3ddbd9" stroke-width="1.5"/>
-        <circle cx="16" cy="3" r="1.5" fill="#3ddbd9"/>
-        <!-- head -->
-        <rect x="9" y="7" width="14" height="10" rx="2" fill="#008080"/>
-        <!-- eyes -->
-        <rect x="12" y="10" width="3" height="3" rx="0.5" fill="#3ddbd9"/>
-        <rect x="17" y="10" width="3" height="3" rx="0.5" fill="#3ddbd9"/>
-        <!-- mouth bar -->
-        <rect x="13" y="15" width="6" height="1" rx="0.5" fill="#ffffff" opacity="0.7"/>
-        <!-- body -->
-        <rect x="11" y="18" width="10" height="7" rx="1" fill="#008080"/>
-        <!-- chest light -->
-        <rect x="14" y="20" width="4" height="2" rx="0.5" fill="#3ddbd9" opacity="0.9"/>
-        <!-- legs -->
-        <rect x="12" y="25" width="3" height="3" rx="1" fill="#005a5a"/>
-        <rect x="17" y="25" width="3" height="3" rx="1" fill="#005a5a"/>
+        <!-- helmet outer -->
+        <rect x="7" y="6" width="18" height="16" rx="4" fill="#005a5a"/>
+        <!-- visor window -->
+        <rect x="10" y="9" width="12" height="8" rx="2" fill="#0d2f3f"/>
+        <!-- visor glow teal -->
+        <rect x="11" y="10" width="10" height="6" rx="1.5" fill="#008080" opacity="0.35"/>
+        <!-- HUD left dot -->
+        <circle cx="13" cy="13" r="1.5" fill="#3ddbd9"/>
+        <!-- HUD right dot -->
+        <circle cx="19" cy="13" r="1.5" fill="#3ddbd9"/>
+        <!-- HUD centre bar -->
+        <rect x="14" y="15" width="4" height="1" rx="0.5" fill="#3ddbd9" opacity="0.9"/>
+        <!-- neck -->
+        <rect x="14" y="22" width="4" height="2" rx="1" fill="#005a5a"/>
+        <!-- shoulders / body -->
+        <rect x="9" y="24" width="14" height="5" rx="2" fill="#007373"/>
+        <!-- chest accent stripe -->
+        <rect x="13" y="25.5" width="6" height="1.5" rx="0.75" fill="#3ddbd9" opacity="0.8"/>
+        <!-- helmet top ridge -->
+        <rect x="13" y="4" width="6" height="3" rx="1.5" fill="#007373"/>
+        <!-- antenna tip -->
+        <circle cx="16" cy="3" r="1.2" fill="#3ddbd9"/>
     </svg>`,
 
     /*
@@ -319,10 +324,10 @@ function applyTheme(themeName) {
     subtitle.textContent = currentTheme.description;
     player.innerHTML = currentTheme.playerIcon;
 
-    const overlayIcon = startOverlay.querySelector(".large-icon");
+    const overlayPlayerIcon = document.getElementById("overlayPlayerIcon");
 
-    if (overlayIcon) {
-        overlayIcon.innerHTML = currentTheme.playerIcon;
+    if (overlayPlayerIcon) {
+        overlayPlayerIcon.innerHTML = currentTheme.playerIcon;
     }
 }
 
@@ -427,13 +432,35 @@ function resetGame() {
 
     startOverlay.innerHTML = `
         <div class="overlay-content">
-            <div class="large-icon">${currentTheme.playerEmoji}</div>
-            <h2>Ready to play?</h2>
-            <p>${currentTheme.description}</p>
-            <p>
-                Choose your settings and select
-                <strong>Start Game</strong>.
+
+            <div class="overlay-logo-wrap">
+                <div class="overlay-player-icon" id="overlayPlayerIcon">
+                    ${currentTheme.playerIcon}
+                </div>
+            </div>
+
+            <p class="overlay-eyebrow">IBM Bob · GITEX 2026</p>
+            <h2 class="overlay-title">Ready to play?</h2>
+
+            <div class="overlay-rules">
+                <div class="overlay-rule">
+                    <span class="overlay-rule-icon overlay-rule-good">★</span>
+                    <span>Catch the stars — earn points</span>
+                </div>
+                <div class="overlay-rule">
+                    <span class="overlay-rule-icon overlay-rule-bad">✕</span>
+                    <span>Avoid the bugs — lose a life</span>
+                </div>
+                <div class="overlay-rule">
+                    <span class="overlay-rule-icon overlay-rule-bonus">◆</span>
+                    <span>Grab the trophy — bonus points</span>
+                </div>
+            </div>
+
+            <p class="overlay-cta">
+                Press <strong>Start Game</strong> to begin
             </p>
+
         </div>
     `;
 
@@ -719,27 +746,24 @@ function endGame(reason) {
     submitToSheets(playerName, email, phone, score);
 
     startOverlay.innerHTML = `
-        <div class="overlay-content">
-            <div class="large-icon">${currentTheme.playerEmoji}</div>
+        <div class="overlay-content overlay-content--result">
 
-            <h2>${resultHeading}</h2>
+            <div class="result-badge">
+                <div class="result-badge-score">${score}</div>
+                <div class="result-badge-label">points</div>
+            </div>
 
-            <p>
-                <strong>${escapeHtml(playerName)}</strong>,
-                your final score is:
-            </p>
+            <p class="overlay-eyebrow">${escapeHtml(playerName)}</p>
+            <h2 class="overlay-title">${resultHeading}</h2>
 
-            <p style="font-size: 2.2rem; margin: 12px 0;">
-                <strong>${score}</strong>
-            </p>
+            ${isNewBest
+                ? `<p class="result-new-best">🏆 New Best Score!</p>`
+                : `<p class="result-best-label">Personal best: <strong>${highScore}</strong></p>`}
 
-            ${isNewBest ? `<p style="color:#a7f0ba; font-weight:700;">🎉 New Best Score!</p>` : `<p style="opacity:0.8;">Best: ${highScore}</p>`}
-
-            <p>${scoreMessage}</p>
-
-            <p>${currentTheme.successMessage}</p>
+            <p class="result-message">${scoreMessage}</p>
 
             ${leaderboardHTML}
+
         </div>
     `;
 
