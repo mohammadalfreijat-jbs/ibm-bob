@@ -1,226 +1,452 @@
+/* ─────────────────────────────────────────────────────────────
+   IBM Carbon Design System – custom token map
+   Primary brand: JBS teal #008080
+───────────────────────────────────────────────────────────── */
 :root {
-    --background-color: #f4f7fb;
-    --panel-color: #ffffff;
+    /* Brand */
+    --jbs-teal:           #008080;
+    --jbs-teal-hover:     #006666;
+    --jbs-teal-active:    #005555;
+    --jbs-teal-light:     #e0f4f4;
+
+    /* Carbon Gray 10 shell */
+    --background-color:   #f4f4f4;
+    --panel-color:        #ffffff;
+    --layer-01:           #f4f4f4;
+    --layer-02:           #ffffff;
+
+    /* Carbon game canvas */
     --game-background-start: #071a2f;
-    --game-background-end: #123f68;
-    --primary-color: #0f62fe;
-    --primary-hover: #0353e9;
-    --accent-color: #78a9ff;
-    --text-color: #161616;
-    --muted-text: #525252;
-    --border-color: #d9e2ec;
-    --danger-color: #da1e28;
-    --success-color: #24a148;
-    --shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    --game-background-end:   #123f68;
+
+    /* Carbon type */
+    --text-color:         #161616;
+    --text-secondary:     #525252;
+    --text-on-color:      #ffffff;
+    --text-placeholder:   #a8a8a8;
+
+    /* Carbon interactive */
+    --primary-color:      var(--jbs-teal);
+    --primary-hover:      var(--jbs-teal-hover);
+    --accent-color:       #3ddbd9;   /* teal-30 */
+
+    /* Carbon status */
+    --border-color:       #e0e0e0;
+    --border-strong:      #8d8d8d;
+    --danger-color:       #da1e28;
+    --success-color:      #24a148;
+
+    /* Elevation */
+    --shadow-sm:  0 2px 6px rgba(0,0,0,0.10);
+    --shadow:     0 8px 24px rgba(0,0,0,0.12);
+    --shadow-lg:  0 16px 48px rgba(0,0,0,0.18);
 }
 
-* {
+/* ─────────────────────────────────────────────────────────────
+   Reset & base
+───────────────────────────────────────────────────────────── */
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
 body {
     min-height: 100vh;
     margin: 0;
-    padding: 24px;
-    font-family: Arial, Helvetica, sans-serif;
+    padding: 0;
+    font-family: 'IBM Plex Sans', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
     color: var(--text-color);
-    background:
-        radial-gradient(circle at top left, #d0e2ff, transparent 35%),
-        var(--background-color);
+    background: var(--background-color);
 }
 
-button,
-input,
-select {
-    font: inherit;
-}
+/* ─────────────────────────────────────────────────────────────
+   IBM Carbon Design – component tokens (buttons, inputs, selects)
+───────────────────────────────────────────────────────────── */
 
-button {
+/* Buttons */
+.cds-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 16px;
+    border: 1px solid transparent;
+    border-radius: 0;          /* Carbon uses sharp corners */
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.16px;
     cursor: pointer;
+    transition: background 110ms ease, border-color 110ms ease, color 110ms ease;
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
 }
 
+.cds-btn--primary {
+    background: var(--jbs-teal);
+    border-color: var(--jbs-teal);
+    color: #fff;
+}
+.cds-btn--primary:hover  { background: var(--jbs-teal-hover); border-color: var(--jbs-teal-hover); }
+.cds-btn--primary:active { background: var(--jbs-teal-active); }
+
+.cds-btn--secondary {
+    background: transparent;
+    border-color: var(--jbs-teal);
+    color: var(--jbs-teal);
+}
+.cds-btn--secondary:hover  { background: var(--jbs-teal-light); }
+.cds-btn--secondary:active { background: #c0e8e8; }
+.cds-btn--secondary:disabled {
+    border-color: #c6c6c6;
+    color: #c6c6c6;
+    cursor: not-allowed;
+}
+
+.cds-btn--ghost {
+    background: transparent;
+    border-color: transparent;
+    color: var(--jbs-teal);
+}
+.cds-btn--ghost:hover  { background: var(--jbs-teal-light); }
+.cds-btn--ghost:active { background: #c0e8e8; }
+
+/* Inputs */
+.cds-input,
+.cds-select {
+    display: block;
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border: none;
+    border-bottom: 1px solid var(--border-strong);
+    border-radius: 0;
+    background: var(--layer-01);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 110ms ease, background 110ms ease;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.cds-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23525252' d='M8 10L3 5h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+.cds-input:focus,
+.cds-select:focus {
+    border-bottom-color: var(--jbs-teal);
+    background: var(--layer-02);
+    outline: 2px solid var(--jbs-teal);
+    outline-offset: -2px;
+}
+
+.cds-input::placeholder { color: var(--text-placeholder); }
+
+.cds-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.32px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.cds-required { color: var(--danger-color); }
+
+.cds-form-item { margin-bottom: 16px; }
+
+.cds-helper-error {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: var(--danger-color);
+}
+
+.cds-input.cds-input--error {
+    border-bottom-color: var(--danger-color);
+    outline: 2px solid var(--danger-color);
+    outline-offset: -2px;
+}
+
+/* Focus ring for keyboard navigation */
+.cds-btn:focus-visible,
+.cds-input:focus-visible,
+.cds-select:focus-visible,
+.game-area:focus-visible {
+    outline: 2px solid var(--jbs-teal);
+    outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Registration / Landing screen
+───────────────────────────────────────────────────────────── */
+.reg-screen {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #008080;
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.12), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0,0,0,0.15),        transparent 40%);
+}
+
+.reg-card {
+    width: min(480px, 100%);
+    padding: 48px 40px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 2px;             /* Carbon uses nearly-sharp corners */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.reg-logo-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.reg-logo {
+    height: 56px;
+    width: auto;
+}
+
+.reg-title {
+    margin: 0 0 6px;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.25;
+}
+
+.reg-subtitle {
+    margin: 0 0 32px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.32px;
+    color: rgba(255,255,255,0.72);
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.reg-form .cds-label {
+    color: rgba(255,255,255,0.80);
+}
+
+.reg-form .cds-input {
+    background: rgba(255,255,255,0.10);
+    border-bottom-color: rgba(255,255,255,0.50);
+    color: #ffffff;
+}
+
+.reg-form .cds-input::placeholder {
+    color: rgba(255,255,255,0.45);
+}
+
+.reg-form .cds-input:focus {
+    background: rgba(255,255,255,0.18);
+    border-bottom-color: #fff;
+    outline-color: #fff;
+}
+
+.reg-submit {
+    width: 100%;
+    margin-top: 8px;
+    height: 52px;
+    font-size: 15px;
+    background: #ffffff;
+    border-color: #ffffff;
+    color: var(--jbs-teal);
+    font-weight: 700;
+}
+
+.reg-submit:hover  { background: #e0f4f4; border-color: #e0f4f4; }
+.reg-submit:active { background: #c0e8e8; border-color: #c0e8e8; }
+
+/* ─────────────────────────────────────────────────────────────
+   Game screen shell
+───────────────────────────────────────────────────────────── */
 .game-wrapper {
     width: min(1200px, 100%);
     margin: 0 auto;
+    padding: 24px;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Game header
+───────────────────────────────────────────────────────────── */
 .game-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
     margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.game-header-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.header-logo {
+    height: 40px;
+    width: auto;
+    flex-shrink: 0;
 }
 
 .eyebrow {
-    margin: 0 0 6px;
-    color: var(--primary-color);
-    font-size: 0.82rem;
+    margin: 0 0 4px;
+    color: var(--jbs-teal);
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.32px;
     text-transform: uppercase;
 }
 
 h1 {
     margin: 0;
-    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
 }
 
 .subtitle {
-    margin: 8px 0 0;
-    color: var(--muted-text);
+    margin: 4px 0 0;
+    color: var(--text-secondary);
+    font-size: 13px;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Scoreboard
+───────────────────────────────────────────────────────────── */
 .scoreboard {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-    margin-bottom: 18px;
+    gap: 8px;
+    margin-bottom: 16px;
 }
 
 .score-card {
     min-width: 0;
-    padding: 14px 18px;
+    padding: 12px 16px;
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-top: 3px solid var(--jbs-teal);
     background: var(--panel-color);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
-    transition: border-color 0.3s, background 0.3s;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.25s, background 0.25s;
 }
 
 .score-card.urgent {
+    border-top-color: var(--danger-color);
     border-color: var(--danger-color);
     background: #fff1f1;
     animation: urgentPulse 600ms infinite alternate;
 }
 
 .score-card.urgent strong,
-.score-card.urgent .score-label {
-    color: var(--danger-color);
-}
+.score-card.urgent .score-label { color: var(--danger-color); }
 
 .score-label {
     display: block;
-    margin-bottom: 5px;
-    color: var(--muted-text);
-    font-size: 0.8rem;
+    margin-bottom: 4px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.32px;
     text-transform: uppercase;
 }
 
 .score-card strong {
     display: block;
     overflow: hidden;
-    font-size: 1.35rem;
+    font-size: 1.25rem;
+    font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Game layout (sidebar + canvas)
+───────────────────────────────────────────────────────────── */
 .game-layout {
     display: grid;
-    grid-template-columns: 280px minmax(0, 1fr);
-    gap: 18px;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 16px;
     align-items: stretch;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Control panel
+───────────────────────────────────────────────────────────── */
 .control-panel {
-    padding: 22px;
+    padding: 20px;
     border: 1px solid var(--border-color);
-    border-radius: 16px;
     background: var(--panel-color);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-sm);
 }
 
 .control-panel h2 {
     margin: 0 0 20px;
-    font-size: 1.25rem;
-}
-
-.control-panel label {
-    display: block;
-    margin: 15px 0 7px;
-    font-size: 0.9rem;
+    font-size: 14px;
     font-weight: 700;
+    letter-spacing: 0.16px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
 }
 
-.control-panel input,
-.control-panel select {
-    width: 100%;
-    min-height: 44px;
-    padding: 10px 12px;
-    border: 1px solid #8d8d8d;
-    border-radius: 8px;
-    color: var(--text-color);
-    background: white;
+.control-panel .cds-label {
+    margin-top: 16px;
 }
 
-.control-panel input:focus,
-.control-panel select:focus,
-button:focus-visible,
-.game-area:focus-visible {
-    outline: 3px solid rgba(15, 98, 254, 0.35);
-    outline-offset: 2px;
-}
-
-.primary-button,
-.secondary-button {
-    min-height: 44px;
-    padding: 11px 18px;
-    border-radius: 8px;
-    font-weight: 700;
-}
-
-.primary-button {
-    width: 100%;
-    margin-top: 20px;
-    border: 1px solid var(--primary-color);
-    color: white;
-    background: var(--primary-color);
-}
-
-.primary-button:hover {
-    background: var(--primary-hover);
-}
-
-.secondary-button {
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    background: transparent;
-}
-
-.control-panel .secondary-button {
+.control-panel .cds-btn {
     width: 100%;
     margin-top: 10px;
+    justify-content: center;
 }
 
-.secondary-button:hover {
-    background: #edf5ff;
+.control-panel .cds-btn--primary {
+    margin-top: 20px;
 }
 
 .keyboard-help {
-    margin: 18px 0 0;
-    color: var(--muted-text);
-    font-size: 0.82rem;
+    margin: 16px 0 0;
+    color: var(--text-secondary);
+    font-size: 12px;
     line-height: 1.5;
 }
 
-.game-area-container {
-    min-width: 0;
-}
+/* ─────────────────────────────────────────────────────────────
+   Game canvas area
+───────────────────────────────────────────────────────────── */
+.game-area-container { min-width: 0; }
 
 .game-area {
     position: relative;
     width: 100%;
     height: 540px;
     overflow: hidden;
-    border: 4px solid var(--accent-color);
-    border-radius: 16px;
+    border: 3px solid var(--accent-color);
     background:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1), transparent 25%),
-        linear-gradient(
-            180deg,
-            var(--game-background-start),
-            var(--game-background-end)
-        );
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08), transparent 25%),
+        linear-gradient(180deg, var(--game-background-start), var(--game-background-end));
     box-shadow: var(--shadow);
     user-select: none;
 }
@@ -228,14 +454,16 @@ button:focus-visible,
 .game-area::before {
     position: absolute;
     inset: 0;
-    background-image:
-        radial-gradient(circle, white 1px, transparent 1px);
+    background-image: radial-gradient(circle, white 1px, transparent 1px);
     background-size: 44px 44px;
     content: "";
-    opacity: 0.12;
+    opacity: 0.10;
     pointer-events: none;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Player
+───────────────────────────────────────────────────────────── */
 .player {
     position: absolute;
     bottom: 18px;
@@ -245,19 +473,19 @@ button:focus-visible,
     height: 62px;
     padding: 7px;
     place-items: center;
-    border: 3px solid rgba(255, 255, 255, 0.85);
-    border-radius: 18px;
-    background: var(--primary-color);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    border: 3px solid rgba(255,255,255,0.85);
+    border-radius: 4px;
+    background: var(--jbs-teal);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     transition: left 40ms linear;
     z-index: 3;
 }
 
-.player svg {
-    width: 100%;
-    height: 100%;
-}
+.player svg { width: 100%; height: 100%; }
 
+/* ─────────────────────────────────────────────────────────────
+   Falling items
+───────────────────────────────────────────────────────────── */
 .falling-item {
     position: absolute;
     top: -55px;
@@ -266,33 +494,21 @@ button:focus-visible,
     height: 48px;
     padding: 5px;
     place-items: center;
-    border: 2px solid rgba(255, 255, 255, 0.75);
+    border: 2px solid rgba(255,255,255,0.75);
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+    background: rgba(255,255,255,0.92);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
     z-index: 2;
 }
 
-.falling-item svg {
-    width: 100%;
-    height: 100%;
-}
+.falling-item svg { width: 100%; height: 100%; }
+.good-item  { animation: itemGlow 900ms infinite alternate; }
+.bad-item   { border-color: #ffb3b8; background: #fff1f1; }
+.bonus-item { border-color: #ffd700; background: #fffbe6; animation: bonusGlow 600ms infinite alternate; }
 
-.good-item {
-    animation: itemGlow 900ms infinite alternate;
-}
-
-.bad-item {
-    border-color: #ffb3b8;
-    background: #fff1f1;
-}
-
-.bonus-item {
-    border-color: #ffd700;
-    background: #fffbe6;
-    animation: bonusGlow 600ms infinite alternate;
-}
-
+/* ─────────────────────────────────────────────────────────────
+   Overlays
+───────────────────────────────────────────────────────────── */
 .overlay {
     position: absolute;
     inset: 0;
@@ -301,174 +517,128 @@ button:focus-visible,
     place-items: center;
     color: white;
     text-align: center;
-    background: rgba(5, 17, 31, 0.82);
+    background: rgba(5,17,31,0.82);
     backdrop-filter: blur(3px);
     z-index: 10;
 }
 
-.overlay.hidden {
-    display: none;
-}
+.overlay.hidden { display: none; }
 
 .overlay-content {
     width: min(460px, 100%);
     padding: 26px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255,255,255,0.20);
+    background: rgba(255,255,255,0.08);
 }
 
-.overlay-content h2 {
-    margin: 8px 0 14px;
-    font-size: 2rem;
-}
+.overlay-content h2 { margin: 8px 0 14px; font-size: 2rem; }
+.overlay-content p  { line-height: 1.55; }
+.large-icon         { font-size: 4rem; }
 
-.overlay-content p {
-    line-height: 1.55;
-}
-
-.large-icon {
-    font-size: 4rem;
-}
-
+/* ─────────────────────────────────────────────────────────────
+   Mobile controls
+───────────────────────────────────────────────────────────── */
 .mobile-controls {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 12px;
+    gap: 8px;
+    margin-top: 10px;
 }
 
 .mobile-controls button {
     min-height: 52px;
-    border: 0;
-    border-radius: 10px;
+    border: none;
     color: white;
-    font-weight: 700;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
     background: #393939;
+    cursor: pointer;
     touch-action: manipulation;
 }
 
-.mobile-controls button:active {
-    background: var(--primary-color);
-}
+.mobile-controls button:active { background: var(--jbs-teal); }
 
+/* ─────────────────────────────────────────────────────────────
+   Dialog
+───────────────────────────────────────────────────────────── */
 dialog {
     width: min(520px, calc(100% - 32px));
     padding: 0;
-    border: 0;
-    border-radius: 16px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border-color);
+    border-radius: 0;
+    box-shadow: var(--shadow-lg);
 }
 
-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.55);
-}
+dialog::backdrop { background: rgba(0,0,0,0.55); }
 
-.dialog-content {
-    padding: 26px;
-}
+.dialog-content { padding: 24px 28px; }
+.dialog-content h2 { margin-top: 0; }
+.dialog-content li { margin-bottom: 8px; line-height: 1.4; }
+.dialog-content .cds-btn { margin-top: 16px; }
 
-.dialog-content h2 {
-    margin-top: 0;
-}
-
-.dialog-content li {
-    margin-bottom: 8px;
-    line-height: 1.4;
-}
-
-.dialog-content .primary-button {
-    width: auto;
-}
-
+/* ─────────────────────────────────────────────────────────────
+   Score popup
+───────────────────────────────────────────────────────────── */
 .score-popup {
     position: absolute;
     color: white;
     font-size: 1.15rem;
     font-weight: 800;
     pointer-events: none;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.7);
     animation: popupMove 700ms forwards;
     z-index: 5;
 }
 
-.screen-flash {
-    animation: dangerFlash 250ms;
-}
+.screen-flash { animation: dangerFlash 250ms; }
 
+/* ─────────────────────────────────────────────────────────────
+   Keyframes
+───────────────────────────────────────────────────────────── */
 @keyframes itemGlow {
-    from {
-        box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-    }
-
-    to {
-        box-shadow: 0 0 20px rgba(120, 169, 255, 0.95);
-    }
+    from { box-shadow: 0 0 8px rgba(255,255,255,0.4); }
+    to   { box-shadow: 0 0 20px rgba(61,219,217,0.95); }
 }
 
 @keyframes bonusGlow {
-    from {
-        box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
-        transform: scale(1);
-    }
-
-    to {
-        box-shadow: 0 0 28px rgba(255, 215, 0, 1);
-        transform: scale(1.12);
-    }
+    from { box-shadow: 0 0 10px rgba(255,215,0,0.6); transform: scale(1); }
+    to   { box-shadow: 0 0 28px rgba(255,215,0,1);   transform: scale(1.12); }
 }
 
 @keyframes popupMove {
-    from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    to {
-        opacity: 0;
-        transform: translateY(-35px);
-    }
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-35px); }
 }
 
 @keyframes urgentPulse {
-    from {
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
-    }
-
-    to {
-        box-shadow: 0 0 18px rgba(218, 30, 40, 0.55);
-    }
+    from { box-shadow: var(--shadow-sm); }
+    to   { box-shadow: 0 0 18px rgba(218,30,40,0.55); }
 }
 
 @keyframes dangerFlash {
-    0%,
-    100% {
-        box-shadow: var(--shadow);
-    }
-
+    0%, 100% { box-shadow: var(--shadow); }
     50% {
         box-shadow:
-            inset 0 0 50px rgba(218, 30, 40, 0.75),
+            inset 0 0 50px rgba(218,30,40,0.75),
             var(--shadow);
     }
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Responsive
+───────────────────────────────────────────────────────────── */
 @media (max-width: 850px) {
-    body {
-        padding: 14px;
-    }
+    .game-wrapper { padding: 14px; }
 
-    .scoreboard {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    .scoreboard { grid-template-columns: repeat(3, 1fr); }
 
-    .game-layout {
-        grid-template-columns: 1fr;
-    }
+    .game-layout { grid-template-columns: 1fr; }
 
-    .game-area {
-        height: 500px;
-    }
+    .game-area { height: 500px; }
+
+    .game-header-left { gap: 12px; }
+    .header-logo { height: 32px; }
 }
 
 @media (max-width: 520px) {
@@ -477,17 +647,15 @@ dialog::backdrop {
         flex-direction: column;
     }
 
-    .score-card {
-        padding: 12px;
-    }
+    .score-card { padding: 10px 12px; }
 
-    .game-area {
-        height: 430px;
-    }
+    .game-area { height: 430px; }
 
     .player {
         width: 54px;
         height: 54px;
         font-size: 1.9rem;
     }
+
+    .reg-card { padding: 32px 20px; }
 }

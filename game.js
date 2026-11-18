@@ -1093,4 +1093,66 @@ function escapeHtml(value) {
         .replaceAll("'", "&#039;");
 }
 
-initializeGame();
+/*
+    Registration screen → game screen transition
+*/
+
+(function setupRegistration() {
+    const regScreen   = document.getElementById("registrationScreen");
+    const gameScreen  = document.getElementById("gameScreen");
+    const regForm     = document.getElementById("registrationForm");
+    const regName     = document.getElementById("reg-name");
+    const regEmail    = document.getElementById("reg-email");
+    const regPhone    = document.getElementById("reg-phone");
+    const nameError   = document.getElementById("reg-name-error");
+    const emailError  = document.getElementById("reg-email-error");
+
+    if (!regScreen || !regForm) {
+        return;
+    }
+
+    regForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        /* — Validate — */
+        let valid = true;
+
+        const nameVal  = regName.value.trim();
+        const emailVal = regEmail.value.trim();
+
+        if (nameVal.length === 0) {
+            regName.classList.add("cds-input--error");
+            nameError.hidden = false;
+            valid = false;
+        } else {
+            regName.classList.remove("cds-input--error");
+            nameError.hidden = true;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(emailVal)) {
+            regEmail.classList.add("cds-input--error");
+            emailError.hidden = false;
+            valid = false;
+        } else {
+            regEmail.classList.remove("cds-input--error");
+            emailError.hidden = true;
+        }
+
+        if (!valid) {
+            return;
+        }
+
+        /* — Populate hidden game inputs — */
+        playerNameInput.value = nameVal;
+        emailInput.value      = emailVal;
+        phoneInput.value      = regPhone.value.trim();
+
+        /* — Switch screens — */
+        regScreen.hidden = true;
+        gameScreen.hidden = false;
+
+        /* — Initialise game now that the canvas is visible — */
+        initializeGame();
+    });
+}());
