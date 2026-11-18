@@ -29,129 +29,85 @@ const gameConfig = {
 
 /* SVG icon helpers — viewBox="0 0 32 32", sized to fill the item container. */
 const svg = {
-    /* Player icons */
+
+    /*
+     * Player — IBM Carbon "Bot" icon style
+     * Teal (#008080) body, white face, #3ddbd9 antenna
+     */
     robot: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <rect x="8" y="10" width="16" height="12" rx="3" fill="#fff" stroke="#0f62fe" stroke-width="1.5"/>
-        <circle cx="12" cy="16" r="2" fill="#0f62fe"/>
-        <circle cx="20" cy="16" r="2" fill="#0f62fe"/>
-        <rect x="14" y="6" width="4" height="4" rx="1" fill="#78a9ff"/>
-        <line x1="16" y1="6" x2="16" y2="4" stroke="#78a9ff" stroke-width="1.5"/>
-        <circle cx="16" cy="3.5" r="1.5" fill="#78a9ff"/>
-        <rect x="11" y="22" width="4" height="3" rx="1" fill="#0f62fe"/>
-        <rect x="17" y="22" width="4" height="3" rx="1" fill="#0f62fe"/>
+        <!-- antenna -->
+        <line x1="16" y1="7" x2="16" y2="4" stroke="#3ddbd9" stroke-width="1.5"/>
+        <circle cx="16" cy="3" r="1.5" fill="#3ddbd9"/>
+        <!-- head -->
+        <rect x="9" y="7" width="14" height="10" rx="2" fill="#008080"/>
+        <!-- eyes -->
+        <rect x="12" y="10" width="3" height="3" rx="0.5" fill="#3ddbd9"/>
+        <rect x="17" y="10" width="3" height="3" rx="0.5" fill="#3ddbd9"/>
+        <!-- mouth bar -->
+        <rect x="13" y="15" width="6" height="1" rx="0.5" fill="#ffffff" opacity="0.7"/>
+        <!-- body -->
+        <rect x="11" y="18" width="10" height="7" rx="1" fill="#008080"/>
+        <!-- chest light -->
+        <rect x="14" y="20" width="4" height="2" rx="0.5" fill="#3ddbd9" opacity="0.9"/>
+        <!-- legs -->
+        <rect x="12" y="25" width="3" height="3" rx="1" fill="#005a5a"/>
+        <rect x="17" y="25" width="3" height="3" rx="1" fill="#005a5a"/>
     </svg>`,
 
-    shield: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <path d="M16 4 L26 8 L26 16 C26 22 16 28 16 28 C16 28 6 22 6 16 L6 8 Z" fill="#007d79" stroke="#42be65" stroke-width="1.5"/>
-        <path d="M12 16 L15 19 L20 13" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>`,
-
-    car: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <rect x="4" y="14" width="24" height="10" rx="2" fill="#198038"/>
-        <path d="M8 14 L11 8 L21 8 L24 14" fill="#a7f0ba" stroke="#198038" stroke-width="1"/>
-        <circle cx="10" cy="24" r="3" fill="#333" stroke="#a7f0ba" stroke-width="1"/>
-        <circle cx="22" cy="24" r="3" fill="#333" stroke="#a7f0ba" stroke-width="1"/>
-        <rect x="13" y="9" width="6" height="4" rx="1" fill="#71e884" opacity="0.7"/>
-    </svg>`,
-
-    brain: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <ellipse cx="16" cy="16" rx="10" ry="9" fill="#8a3ffc" stroke="#d4bbff" stroke-width="1.5"/>
-        <path d="M16 7 C16 7 10 10 10 16 C10 22 16 25 16 25" stroke="#d4bbff" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M16 7 C16 7 22 10 22 16 C22 22 16 25 16 25" stroke="#d4bbff" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="11" cy="13" r="1.5" fill="#fff" opacity="0.8"/>
-        <circle cx="21" cy="13" r="1.5" fill="#fff" opacity="0.8"/>
-        <circle cx="13" cy="19" r="1" fill="#fff" opacity="0.6"/>
-        <circle cx="19" cy="19" r="1" fill="#fff" opacity="0.6"/>
-    </svg>`,
-
-    globe: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <circle cx="16" cy="16" r="11" fill="#00c48c" stroke="#00ff87" stroke-width="1.5"/>
-        <ellipse cx="16" cy="16" rx="5" ry="11" stroke="#00ff87" stroke-width="1" fill="none"/>
-        <line x1="5" y1="16" x2="27" y2="16" stroke="#00ff87" stroke-width="1"/>
-        <line x1="7" y1="11" x2="25" y2="11" stroke="#00ff87" stroke-width="0.8" opacity="0.6"/>
-        <line x1="7" y1="21" x2="25" y2="21" stroke="#00ff87" stroke-width="0.8" opacity="0.6"/>
-    </svg>`,
-
-    /* Good item icons */
+    /*
+     * Good item — IBM Carbon "Star" (filled, 5-point)
+     * Carbon Yellow (#f1c21b) with warm stroke
+     */
     star: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <polygon points="16,4 19.5,13 29,13 21.5,18.5 24.5,28 16,22.5 7.5,28 10.5,18.5 3,13 12.5,13" fill="#ffd700" stroke="#f59e0b" stroke-width="1"/>
+        <polygon
+            points="16,5 19.1,12.5 27.4,12.5 21,17.5 23.6,25 16,20.5 8.4,25 11,17.5 4.6,12.5 12.9,12.5"
+            fill="#f1c21b" stroke="#d4a017" stroke-width="1" stroke-linejoin="round"/>
     </svg>`,
 
-    lock: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <rect x="9" y="15" width="14" height="11" rx="2" fill="#42be65" stroke="#007d79" stroke-width="1.5"/>
-        <path d="M11 15 L11 11 C11 7.5 21 7.5 21 11 L21 15" stroke="#007d79" stroke-width="1.5" fill="none"/>
-        <circle cx="16" cy="20" r="2" fill="#fff"/>
-        <line x1="16" y1="22" x2="16" y2="24" stroke="#fff" stroke-width="1.5"/>
-    </svg>`,
-
-    bolt: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <polygon points="18,4 10,18 15,18 14,28 22,14 17,14" fill="#ffd700" stroke="#f59e0b" stroke-width="1"/>
-    </svg>`,
-
-    bulb: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <path d="M16 5 C11 5 8 9 8 13 C8 17 11 19 12 21 L20 21 C21 19 24 17 24 13 C24 9 21 5 16 5Z" fill="#d4bbff" stroke="#8a3ffc" stroke-width="1.5"/>
-        <rect x="12" y="21" width="8" height="2" rx="1" fill="#8a3ffc"/>
-        <rect x="13" y="23" width="6" height="2" rx="1" fill="#8a3ffc"/>
-        <line x1="16" y1="8" x2="16" y2="12" stroke="#8a3ffc" stroke-width="1.5" opacity="0.5"/>
-    </svg>`,
-
-    diamond: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <polygon points="16,4 28,14 16,28 4,14" fill="#00c48c" stroke="#00ff87" stroke-width="1.5"/>
-        <polygon points="16,8 24,14 16,24 8,14" fill="#00ff87" opacity="0.4"/>
-    </svg>`,
-
-    /* Bad item icons */
+    /*
+     * Bad item — IBM Carbon "Error" / Bug
+     * Carbon Red (#da1e28), clean segmented body
+     */
     bug: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <ellipse cx="16" cy="18" rx="6" ry="7" fill="#da1e28" stroke="#ff8389" stroke-width="1.5"/>
-        <circle cx="16" cy="11" r="4" fill="#da1e28" stroke="#ff8389" stroke-width="1.5"/>
-        <line x1="10" y1="15" x2="5" y2="12" stroke="#ff8389" stroke-width="1.5"/>
-        <line x1="10" y1="19" x2="4" y2="19" stroke="#ff8389" stroke-width="1.5"/>
-        <line x1="22" y1="15" x2="27" y2="12" stroke="#ff8389" stroke-width="1.5"/>
-        <line x1="22" y1="19" x2="28" y2="19" stroke="#ff8389" stroke-width="1.5"/>
-        <circle cx="13.5" cy="10" r="1" fill="#fff" opacity="0.8"/>
-        <circle cx="18.5" cy="10" r="1" fill="#fff" opacity="0.8"/>
+        <!-- head -->
+        <circle cx="16" cy="10" r="4" fill="#da1e28"/>
+        <!-- antennae -->
+        <line x1="13" y1="7"  x2="10" y2="4"  stroke="#da1e28" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="19" y1="7"  x2="22" y2="4"  stroke="#da1e28" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="10" cy="4" r="1.2" fill="#ff8389"/>
+        <circle cx="22" cy="4" r="1.2" fill="#ff8389"/>
+        <!-- body segments -->
+        <ellipse cx="16" cy="18" rx="5" ry="6" fill="#da1e28"/>
+        <line x1="11" y1="16" x2="11" y2="20" stroke="#ff8389" stroke-width="0.8" opacity="0.5"/>
+        <line x1="21" y1="16" x2="21" y2="20" stroke="#ff8389" stroke-width="0.8" opacity="0.5"/>
+        <!-- legs — three pairs -->
+        <line x1="11" y1="15" x2="6"  y2="13" stroke="#ff8389" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="11" y1="19" x2="6"  y2="19" stroke="#ff8389" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="11" y1="23" x2="6"  y2="25" stroke="#ff8389" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="21" y1="15" x2="26" y2="13" stroke="#ff8389" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="21" y1="19" x2="26" y2="19" stroke="#ff8389" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="21" y1="23" x2="26" y2="25" stroke="#ff8389" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- eyes -->
+        <circle cx="14" cy="9.5" r="1" fill="#fff" opacity="0.9"/>
+        <circle cx="18" cy="9.5" r="1" fill="#fff" opacity="0.9"/>
     </svg>`,
 
-    virus: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <circle cx="16" cy="16" r="7" fill="#da1e28" stroke="#ff8389" stroke-width="1.5"/>
-        <line x1="16" y1="5" x2="16" y2="9" stroke="#ff8389" stroke-width="2" stroke-linecap="round"/>
-        <line x1="16" y1="23" x2="16" y2="27" stroke="#ff8389" stroke-width="2" stroke-linecap="round"/>
-        <line x1="5" y1="16" x2="9" y2="16" stroke="#ff8389" stroke-width="2" stroke-linecap="round"/>
-        <line x1="23" y1="16" x2="27" y2="16" stroke="#ff8389" stroke-width="2" stroke-linecap="round"/>
-        <line x1="8" y1="8" x2="11" y2="11" stroke="#ff8389" stroke-width="2" stroke-linecap="round"/>
-        <line x1="21" y1="21" x2="24" y2="24" stroke="#ff8389" stroke-width="2" stroke-linecap="round"/>
-        <line x1="24" y1="8" x2="21" y2="11" stroke="#ff8389" stroke-width="2" stroke-linecap="round"/>
-        <line x1="11" y1="21" x2="8" y2="24" stroke="#ff8389" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="16" cy="16" r="3" fill="#ff8389" opacity="0.5"/>
-    </svg>`,
-
-    cone: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <polygon points="16,5 26,26 6,26" fill="#f1c21b" stroke="#da1e28" stroke-width="1.5"/>
-        <rect x="6" y="23" width="20" height="3" rx="1" fill="#da1e28"/>
-        <line x1="11" y1="18" x2="21" y2="18" stroke="#fff" stroke-width="2"/>
-        <line x1="13" y1="13" x2="19" y2="13" stroke="#fff" stroke-width="1.5"/>
-    </svg>`,
-
-    swirl: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <path d="M16 6 C22 6 26 10 26 16 C26 20 23 23 19 23 C15 23 13 20 13 17 C13 14 15 12 17 12 C19 12 20 14 20 16" stroke="#da1e28" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        <circle cx="20" cy="16" r="2" fill="#da1e28"/>
-    </svg>`,
-
-    warning: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <polygon points="16,4 29,27 3,27" fill="#f1c21b" stroke="#da1e28" stroke-width="1.5"/>
-        <rect x="15" y="13" width="2" height="7" rx="1" fill="#da1e28"/>
-        <circle cx="16" cy="23" r="1.5" fill="#da1e28"/>
-    </svg>`,
-
-    /* Bonus icon */
+    /*
+     * Bonus item — IBM Carbon "Trophy" (award)
+     * Carbon Gold palette
+     */
     trophy: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <rect x="12" y="24" width="8" height="3" rx="1" fill="#ffd700" stroke="#f59e0b" stroke-width="1"/>
-        <rect x="10" y="27" width="12" height="2" rx="1" fill="#f59e0b"/>
-        <path d="M10 6 L10 18 C10 22 22 22 22 18 L22 6 Z" fill="#ffd700" stroke="#f59e0b" stroke-width="1.5"/>
-        <path d="M10 9 C10 9 6 9 6 13 C6 17 10 17 10 17" stroke="#f59e0b" stroke-width="1.5" fill="none"/>
-        <path d="M22 9 C22 9 26 9 26 13 C26 17 22 17 22 17" stroke="#f59e0b" stroke-width="1.5" fill="none"/>
-        <line x1="13" y1="24" x2="13" y2="22" stroke="#f59e0b" stroke-width="1"/>
-        <line x1="19" y1="24" x2="19" y2="22" stroke="#f59e0b" stroke-width="1"/>
+        <!-- cup body -->
+        <path d="M10 5 L10 18 C10 22 22 22 22 18 L22 5 Z" fill="#f1c21b" stroke="#d4a017" stroke-width="1.5"/>
+        <!-- cup handles -->
+        <path d="M10 8 C10 8 6 8 6 12 C6 16 10 16 10 16" stroke="#d4a017" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M22 8 C22 8 26 8 26 12 C26 16 22 16 22 16" stroke="#d4a017" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- shine line -->
+        <line x1="13" y1="8"  x2="13" y2="17" stroke="#fff" stroke-width="1" opacity="0.4"/>
+        <!-- stem -->
+        <rect x="14" y="22" width="4" height="4" fill="#d4a017"/>
+        <!-- base -->
+        <rect x="10" y="26" width="12" height="2" rx="1" fill="#d4a017"/>
     </svg>`
 };
 
